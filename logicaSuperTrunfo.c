@@ -1,9 +1,5 @@
 #include <stdio.h>
-
-// Desafio Super Trunfo - Países
-// Tema 2 - Comparação das Cartas
-// Este código inicial serve como base para o desenvolvimento do sistema de comparação de cartas de cidades. 
-// Siga os comentários para implementar cada parte do desafio.
+#include <stdlib.h>
 
 float calcula_densidade_populacional(float populacao, float area){
     float densidade = 0;
@@ -73,7 +69,28 @@ int compara_cartas(char NomeCidade1[51], char CodigoCarta1[3],
     return 0;
 }
 
-int main() {
+void LimpaTela() {
+    // Limpar a tela
+    #ifdef __linux__ // se o SO for linux
+        system("clear");
+    #elif _WIN32 // se o SO for Windows
+        system("cls");
+    #endif
+}
+
+void Espera() {
+    printf("\n*** Pressione ENTER para continuar...");
+    int c;
+    // Limpa qualquer entrada residual
+    while ((c = getchar()) != '\n' && c != EOF);
+    // Espera o ENTER
+    getchar();
+}
+
+/**
+ * processo da partida
+ */
+int SuperTrunfo(){
     // Declaração das variáveis para a carta 1
     char Carta1_Estado = "A";
     char Carta1_Codigo_da_carta[4];
@@ -98,8 +115,13 @@ int main() {
     double Carta2_pib_percapita = 0;
     double Carta2_super_poder = 0;
 
+    /* Limpar a tela */
+    LimpaTela();
+
+    printf("\n*** NOVA PARTIDA ***\n");
+
     // Entrada de dados da carta 1
-    printf("Digite os dados da carta1\n");
+    printf("\n*** Digite os dados da carta1 ***\n\n");
     printf("Estado - Uma letra de 'A' a 'H' : ");
     scanf(" %c", &Carta1_Estado);
     printf("Código - A letra do estado seguida de um número de 01 a 04 (ex: A01, B03) : ");
@@ -116,7 +138,7 @@ int main() {
     scanf(" %d", &Carta1_Numero_de_pontos_turisticos);
 
     // Entrada de dados da carta 2
-    printf("\n\nDigite os dados da carta2\n");
+    printf("\n\n*** Digite os dados da carta2 ***\n\n");
     printf("Estado - Uma letra de 'A' a 'H' : ");
     scanf(" %c", &Carta2_Estado);
     printf("Código - A letra do estado seguida de um número de 01 a 04 (ex: A01, B03) : ");
@@ -161,44 +183,131 @@ int main() {
     Carta2_pib_percapita = calcula_pib_percapita(Carta2_PIB, Carta2_Populacao);
     printf("PIB per capita: %.2f reais\n", Carta2_pib_percapita);
     Carta2_super_poder = calcular_super_poder(Carta2_Populacao, Carta2_Area, Carta2_PIB, Carta2_Numero_de_pontos_turisticos, Carta2_pib_percapita);
+
+    Espera();
+
+    short Atributo;
     
-    // Mostrar resultado da comparação
-    printf("\n*** Comparação de Cartas ***\n");
+    do {
+        LimpaTela();
+
+        // Mostrar resultado da comparação
+        printf("\n*** Comparação de Cartas ***\n");
+
+        printf("1. Nome da Cidade\n");
+        printf("2. População\n");
+        printf("3. Área\n");
+        printf("4. PIB\n");
+        printf("5. Número de pontos turísticos\n");
+        printf("6. Densidade demográfica\n");
+        printf("0. Sair\n\n");
     
-    compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                   Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                   "População",
-                   (float) Carta1_Populacao, (float) Carta2_Populacao);
+        printf("Selecione o atributo a ser comparado: ");
+        scanf(" %d", &Atributo);
+    
+        switch (Atributo)
+        {
+            case 0:
+                printf("\nSaindo da partida...\n");
+                break;
+            case 1:
+                printf("\n*** [ Nome da Cidade ] ***\n");
+                printf("Carta 1 - %s (%s)\n", Carta1_Nome_da_cidade, Carta1_Codigo_da_carta);
+                printf("Carta 2 - %s (%s)\n", Carta2_Nome_da_cidade, Carta2_Codigo_da_carta);
+                break;
+            case 2:
+                // População
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "População",
+                            (float) Carta1_Populacao, (float) Carta2_Populacao);
+                break;
+            case 3:
+                // Área
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "Área",
+                            Carta1_Area, Carta2_Area);
+                break;
+            case 4:
+                // PIB
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "PIB",
+                            Carta1_PIB, Carta2_PIB);
+                break;
+            case 5:
+                // Número de Pontos Turísticos
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "Número de Pontos Turísticos",
+                            (float) Carta1_Numero_de_pontos_turisticos, (float) Carta2_Numero_de_pontos_turisticos);
+                break;
+            case 6:
+                // Densidade Populacional
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "Densidade Populacional",
+                            Carta1_densidade_populacional, Carta2_densidade_populacional);
+                break;
+            default:
+                printf("\n*** Atributo inválido! ***\n");
+                break;
+        }
+    
+        /**
+        compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                       Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                       "PIB per Capita",
+                       Carta1_pib_percapita, Carta2_pib_percapita);
+    
+        compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                       Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                       "Super Poder",
+                       Carta1_super_poder, Carta2_super_poder);
+        */
 
-    compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                   Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                   "Área",
-                   Carta1_Area, Carta2_Area);
+       Espera();
 
-    compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                   Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                   "PIB",
-                   Carta1_PIB, Carta2_PIB);
+    } while (Atributo != 0);
+    
+    return 0;
+};
 
-    compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                   Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                   "Pontos Turísticos",
-                   (float) Carta1_Numero_de_pontos_turisticos, (float) Carta2_Numero_de_pontos_turisticos);
+/**
+ * rotina principal da aplicação
+ */
+int main() {
+    /**
+     *  Lógica do processo principal
+     */
+    short Opcao;
 
-    compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                   Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                   "Densidade Populacional",
-                   Carta1_densidade_populacional, Carta2_densidade_populacional);
+    do {
+        LimpaTela();
 
-    compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                   Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                   "PIB per Capita",
-                   Carta1_pib_percapita, Carta2_pib_percapita);
+        printf("\n\n### JOGO SUPER TRUNFO ###\n\n");
+        printf("(1) - Iniciar Nova Partida\n");
+        printf("(0) - Sair do Jogo\n\n");
+        printf("Escolha uma opção: ");
+        scanf(" %d", &Opcao);
 
-    compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                   Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                   "Super Poder",
-                   Carta1_super_poder, Carta2_super_poder);
+        switch (Opcao)
+        {
+            case 1:
+                SuperTrunfo();
+                break;
+
+            case 0:
+                printf("Saindo do jogo...\n");
+                break;
+
+            default:
+                printf("\nOpção inválida!\n");
+                Espera();
+                break;
+        }
+    }  while (Opcao != 0);
 
     return 0;
-}
+};
