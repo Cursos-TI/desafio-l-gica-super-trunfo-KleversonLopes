@@ -42,28 +42,27 @@ int compara_cartas(char NomeCidade1[51], char CodigoCarta1[3],
         printf("%.2f\n", ValorAtributo2);
     }
 
-    /*
-    * se o atributo for Densidade Populacional - vence a carta que tem o valor menor
-    */
+    if (ValorAtributo1 == ValorAtributo2) {
+        printf(" Empate entre as cartas\n");
+        return;
+    }
+
+    char* resultado = "";
+    
     if (NomeAtributo == "Densidade Populacional") {
-        if (ValorAtributo1 < ValorAtributo2) {
-           printf("Resultado: Carta 1 (%s) venceu!\n", NomeCidade1);
-        } else if (ValorAtributo1 > ValorAtributo2) {
-           printf("Resultado: Carta 2 (%s) venceu!\n", NomeCidade2);
-        } else {
-           printf(" Empate entre as cartas\n");
-        }
-    /**
-     * se o atributo não for "Densidade Populacional" vence o maior valor
-     */
+        /*
+        * se o atributo for Densidade Populacional - vence a carta que tem o menor valor
+        */
+        resultado = (ValorAtributo1 < ValorAtributo2) ? 
+            printf("Resultado: Carta 1 (%s) venceu!\n", NomeCidade1) : 
+            printf("Resultado: Carta 2 (%s) venceu!\n", NomeCidade2);
     } else {
-        if (ValorAtributo1 > ValorAtributo2) {
-           printf("Resultado: Carta 1 (%s) venceu!\n", NomeCidade1);
-        } else if (ValorAtributo1 < ValorAtributo2) {
-           printf("Resultado: Carta 2 (%s) venceu!\n", NomeCidade2);
-        } else {
-           printf(" Empate entre as cartas\n");
-        }
+        /**
+         * se o atributo não for "Densidade Populacional" vence o maior valor
+         */
+        resultado = (ValorAtributo1 > ValorAtributo2) ? 
+            printf("Resultado: Carta 1 (%s) venceu!\n", NomeCidade1) : 
+            printf("Resultado: Carta 2 (%s) venceu!\n", NomeCidade2);
     }
 
     return 0;
@@ -186,7 +185,7 @@ int SuperTrunfo(){
 
     Espera();
 
-    short Atributo;
+    short Atributo1, Atributo2 = 0;
     
     do {
         LimpaTela();
@@ -200,18 +199,28 @@ int SuperTrunfo(){
         printf("4. PIB\n");
         printf("5. Número de pontos turísticos\n");
         printf("6. Densidade demográfica\n");
+        printf("7. Reiniciar Atributos\n");
         printf("0. Sair\n\n");
     
-        printf("Selecione o atributo a ser comparado: ");
-        scanf(" %d", &Atributo);
-    
-        switch (Atributo)
+        printf("Selecione o PRIMEIRO atributo a ser comparado: ");
+        scanf(" %d", &Atributo1);
+
+        /**
+         * inicia variáveis de soma
+         */
+        double SomaAtributosCidade1, SomaAtributosCidade2 = 0;
+
+        /**
+         * compara primeiro atributo
+         */
+        switch (Atributo1)
         {
             case 0:
                 printf("\nSaindo da partida...\n");
+                continue;
                 break;
             case 1:
-                printf("\n*** [ Nome da Cidade ] ***\n");
+                printf("\n*** [ Nome das Cidades ] ***\n");
                 printf("Carta 1 - %s (%s)\n", Carta1_Nome_da_cidade, Carta1_Codigo_da_carta);
                 printf("Carta 2 - %s (%s)\n", Carta2_Nome_da_cidade, Carta2_Codigo_da_carta);
                 break;
@@ -221,6 +230,9 @@ int SuperTrunfo(){
                             Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
                             "População",
                             (float) Carta1_Populacao, (float) Carta2_Populacao);
+
+                SomaAtributosCidade1 += (float) Carta1_Populacao;
+                SomaAtributosCidade2 += (float) Carta2_Populacao;
                 break;
             case 3:
                 // Área
@@ -228,6 +240,9 @@ int SuperTrunfo(){
                             Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
                             "Área",
                             Carta1_Area, Carta2_Area);
+
+                SomaAtributosCidade1 += Carta1_Area;
+                SomaAtributosCidade2 += Carta2_Area;
                 break;
             case 4:
                 // PIB
@@ -235,6 +250,9 @@ int SuperTrunfo(){
                             Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
                             "PIB",
                             Carta1_PIB, Carta2_PIB);
+                            
+                SomaAtributosCidade1 += Carta1_PIB;
+                SomaAtributosCidade2 += Carta2_PIB;
                 break;
             case 5:
                 // Número de Pontos Turísticos
@@ -242,6 +260,9 @@ int SuperTrunfo(){
                             Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
                             "Número de Pontos Turísticos",
                             (float) Carta1_Numero_de_pontos_turisticos, (float) Carta2_Numero_de_pontos_turisticos);
+
+                SomaAtributosCidade1 += (float) Carta1_Numero_de_pontos_turisticos;
+                SomaAtributosCidade2 += (float) Carta2_Numero_de_pontos_turisticos;
                 break;
             case 6:
                 // Densidade Populacional
@@ -249,35 +270,137 @@ int SuperTrunfo(){
                             Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
                             "Densidade Populacional",
                             Carta1_densidade_populacional, Carta2_densidade_populacional);
+
+                SomaAtributosCidade1 += Carta1_densidade_populacional;
+                SomaAtributosCidade2 += Carta2_densidade_populacional;
+                break;
+            case 7:
+                continue;
                 break;
             default:
                 printf("\n*** Atributo inválido! ***\n");
+                Espera();
+                continue; // Volta ao início do loop
                 break;
         }
+
+        printf("\n\n");
+        if (Atributo1 != 1) { printf("1. Nome da Cidade\n"); }
+        if (Atributo1 != 2) { printf("2. População\n"); }
+        if (Atributo1 != 3) { printf("3. Área\n"); }
+        if (Atributo1 != 4) { printf("4. PIB\n"); }
+        if (Atributo1 != 5) { printf("5. Número de pontos turísticos\n"); }
+        if (Atributo1 != 6) { printf("6. Densidade demográfica\n"); }
+        if (Atributo1 != 7) { printf("7. Reiniciar Atributos\n");}
+        printf("0. Sair\n\n");
+
+        printf("Selecione o SEGUNDO atributo a ser comparado: ");
+        scanf(" %d", &Atributo2);
     
+        if (Atributo2 == Atributo1) {
+            printf("\n*** Atributo inválido! ***\n");
+            Espera();
+            continue; // Volta ao início do loop
+        }
         /**
-        compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                       Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                       "PIB per Capita",
-                       Carta1_pib_percapita, Carta2_pib_percapita);
-    
-        compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
-                       Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
-                       "Super Poder",
-                       Carta1_super_poder, Carta2_super_poder);
-        */
+         * compara segundo atributo
+         */
+        switch (Atributo2)
+        {
+            case 0:
+                printf("\nSaindo da partida...\n");
+                continue;
+                break;
+            case 1:
+                printf("\n*** [ Nome das Cidades ] ***\n");
+                printf("Carta 1 - %s (%s)\n", Carta1_Nome_da_cidade, Carta1_Codigo_da_carta);
+                printf("Carta 2 - %s (%s)\n", Carta2_Nome_da_cidade, Carta2_Codigo_da_carta);
+                break;
+            case 2:
+                // População
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "População",
+                            (float) Carta1_Populacao, (float) Carta2_Populacao);
+
+                SomaAtributosCidade1 += (float) Carta1_Populacao;
+                SomaAtributosCidade2 += (float) Carta2_Populacao;
+                break;
+            case 3:
+                // Área
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "Área",
+                            Carta1_Area, Carta2_Area);
+
+                SomaAtributosCidade1 += Carta1_Area;
+                SomaAtributosCidade2 += Carta2_Area;
+                break;
+            case 4:
+                // PIB
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "PIB",
+                            Carta1_PIB, Carta2_PIB);
+                            
+                SomaAtributosCidade1 += Carta1_PIB;
+                SomaAtributosCidade2 += Carta2_PIB;
+                break;
+            case 5:
+                // Número de Pontos Turísticos
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "Número de Pontos Turísticos",
+                            (float) Carta1_Numero_de_pontos_turisticos, (float) Carta2_Numero_de_pontos_turisticos);
+
+                SomaAtributosCidade1 += (float) Carta1_Numero_de_pontos_turisticos;
+                SomaAtributosCidade2 += (float) Carta2_Numero_de_pontos_turisticos;
+                break;
+            case 6:
+                // Densidade Populacional
+                compara_cartas(Carta1_Nome_da_cidade, Carta1_Codigo_da_carta,
+                            Carta2_Nome_da_cidade, Carta2_Codigo_da_carta,
+                            "Densidade Populacional",
+                            Carta1_densidade_populacional, Carta2_densidade_populacional);
+
+                SomaAtributosCidade1 += Carta1_densidade_populacional;
+                SomaAtributosCidade2 += Carta2_densidade_populacional;
+                break;
+            case 7:
+                continue;
+                break;
+            default:
+                printf("\n*** Atributo inválido! ***\n");
+                Espera();
+                continue; // Volta ao início do loop
+                break;
+        }
+
+        /**
+         * mostra soma dos atributos
+         */
+        printf("\n\n*** Soma dos atributos ***\n");
+        printf("Cidade 1 (%s): %.2f\n", Carta1_Nome_da_cidade, SomaAtributosCidade1);
+        printf("Cidade 2 (%s): %.2f\n", Carta2_Nome_da_cidade, SomaAtributosCidade2);
+        if (SomaAtributosCidade1 == SomaAtributosCidade2) {
+            printf("\n*** Empate na soma dos atributos! ***\n");
+        } else {
+            char* vencedor = (SomaAtributosCidade1 > SomaAtributosCidade2) ? Carta1_Nome_da_cidade : Carta2_Nome_da_cidade;
+            printf("\n*** A cidade vencedora na soma dos atributos é: %s ***\n", vencedor);
+        }
 
        Espera();
 
-    } while (Atributo != 0);
+    } while (Atributo1 != 0);
     
     return 0;
 };
 
+
 /**
  * rotina principal da aplicação
  */
-int main() {
+void main() {
     /**
      *  Lógica do processo principal
      */
@@ -307,7 +430,5 @@ int main() {
                 Espera();
                 break;
         }
-    }  while (Opcao != 0);
-
-    return 0;
-};
+    } while (Opcao != 0);
+}
