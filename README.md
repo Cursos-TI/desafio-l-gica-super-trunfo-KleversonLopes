@@ -68,6 +68,51 @@ No nível Mestre, o desafio se intensifica com a adição de funcionalidades ava
 - **Confiabilidade:** O sistema deve ser robusto e capaz de lidar com entradas inválidas de forma adequada.
 
 ---
+Menus:
+
+    Inicial - rotina principal
+
+    ### JOGO SUPER TRUNFO ###
+    (1) - Iniciar Nova Partida
+    (0) - Sair do Jogo
+
+
+    Rotina de escolha de atributos
+
+    1. Nome da Cidade
+    2. População
+    3. Área
+    4. PIB
+    5. Número de pontos turísticos
+    6. Densidade demográfica
+    7. Reiniciar Atributos
+    0. Sair - volta ao menu principal
+
+---
+## Compilação
+
+gcc -v logicaSuperTrunfo.c -o logicaSuperTrunfo
+
+---
+## execução - não são necessários parâmetros de inicio
+
+# para Linux
+
+atribuir permissão de execução
+
+chmod +x logicaSuperTrunfo
+
+# executar
+
+./logicaSuperTrunfo
+
+# Para Windows - basta executar na pasta onde está o arquivo executável, não sendo necessárias permissões especiaid
+
+powershell: ./logicaSuperTrunfo.exe
+
+CMD: logicaSuperTrunfo.exe
+
+---
 
 Boa sorte no desenvolvimento deste desafio e aproveite para aprender e se divertir enquanto progride pelos níveis!
 
